@@ -2362,7 +2362,7 @@ MonoBehaviour:
   m_MinValue: 0
   m_MaxValue: 1
   m_WholeNumbers: 0
-  m_Value: 1
+  m_Value: 0
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -2938,6 +2938,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1952378917}
   - component: {fileID: 1952378918}
+  - component: {fileID: 1952378919}
   m_Layer: 5
   m_Name: LevelArea
   m_TagString: Untagged
@@ -2976,6 +2977,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1952378916}
   m_CullTransparentMesh: 1
+--- !u!114 &1952378919
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1952378916}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b17e7fdc709d13847b5b899d4995d194, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  expSystem: {fileID: 11400000, guid: 3765968c08a49044895c6ce22cb5189e, type: 2}
+  slider: {fileID: 1485358481}
+  text: {fileID: 0}
 --- !u!1 &2031042602
 GameObject:
   m_ObjectHideFlags: 0
