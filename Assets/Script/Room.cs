@@ -14,6 +14,7 @@ public class Room : MonoBehaviour
 
     private bool isPlayerInside = false;
     private bool isNPCInside;
+    private bool isAvailable;
     CompositeDisposable disposables = new CompositeDisposable();
     private void Awake()
     {
