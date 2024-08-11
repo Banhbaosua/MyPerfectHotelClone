@@ -58,8 +58,8 @@ public class ExpSystem : ScriptableObject, ILoadSavable
             return;
         }
         var data = SaveGame.Load<ExpSystemData>("ExpSystemData");
-        exp.Value = data.exp;
-        _currentLevel = data.currentLevel;
+        exp.Value = data.Exp;
+        _currentLevel = data.CurrentLevel;
     }
 
     public void Save()
@@ -84,13 +84,13 @@ public class ExpSystem : ScriptableObject, ILoadSavable
     }
 }
 [Serializable]
-public struct ExpSystemData
+public readonly struct ExpSystemData
 {
-    public float exp;
-    public int currentLevel;
+    public float Exp { get; }
+    public int CurrentLevel { get; }
     public ExpSystemData(float exp, int currentLevel)
     {
-        this.exp = exp;
-        this.currentLevel = currentLevel;
+        this.Exp = exp;
+        this.CurrentLevel = currentLevel;
     }
 }
