@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf063e427a2f5d64c95fc8e5b3854c7e, type: 3}
+  m_Name: CashPool
+  m_EditorClassIdentifier: 
+  poolName: cash
+  prefab: {fileID: 7188606676989303645, guid: 1aa2082fbff46e441a5ace8f8668eb02, type: 3}
+  amount: 1000
