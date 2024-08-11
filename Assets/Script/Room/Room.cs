@@ -13,9 +13,10 @@ public class Room : MonoBehaviour
     [SerializeField] float rotateDegree;
 
     private bool isPlayerInside = false;
-    private bool isNPCInside;
-    private bool isAvailable;
+    protected bool isAvailable = true;
     CompositeDisposable disposables = new CompositeDisposable();
+
+    public bool IsAvailable => isAvailable;
     private void Awake()
     {
         Initiate();
@@ -25,7 +26,6 @@ public class Room : MonoBehaviour
 
     void Initiate()
     {
-        
         var playerRoomEnterStream = doorColInside.OnTriggerExitAsObservable()
             .Where(x => x.gameObject.CompareTag("Player") && !isPlayerInside)
             .Subscribe(_ =>

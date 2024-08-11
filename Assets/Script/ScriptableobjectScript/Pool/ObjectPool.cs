@@ -22,13 +22,14 @@ public abstract class ObjectPool : ScriptableObject
         poolParent.transform.SetParent(poolHolder);
     }
 
-    public GameObject SpawnObject()
+    public GameObject Borrow()
     {
         return pool.Dequeue();
     }
 
     public void ReturnObject(GameObject obj)
     {
+        obj.SetActive(false);
         pool.Enqueue(obj);
     }
 
