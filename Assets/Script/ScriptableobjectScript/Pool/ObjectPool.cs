@@ -4,20 +4,22 @@ using UnityEngine;
 
 public abstract class ObjectPool : ScriptableObject
 {
-    [SerializeField] string objName;
+    [SerializeField] string poolName;
     [SerializeField] GameObject prefab;
     [SerializeField] int amount;
     private Queue<GameObject> pool;
-    public void InitiatePool(Transform poolParent = null)
+    public void Initiate(Transform poolHolder = null)
     {
-        var poolHolder = new GameObject(objName);
+        var poolParent = new GameObject(poolName);
         pool = new Queue<GameObject>();
         for(int i = 0; i < amount; i++)
         {
-            GameObject go = Instantiate(prefab,poolHolder.transform);
+            GameObject go = Instantiate(prefab,poolParent.transform);
             var finalGo = PoolObjModify(go);
+            go.SetActive(false);
             pool.Enqueue(finalGo);
         }
+        poolParent.transform.SetParent(poolHolder);
     }
 
     public GameObject SpawnObject()
