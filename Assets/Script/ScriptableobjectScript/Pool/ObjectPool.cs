@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UniRx;
 using UnityEngine;
 
 public abstract class ObjectPool : ScriptableObject
@@ -8,6 +9,7 @@ public abstract class ObjectPool : ScriptableObject
     [SerializeField] GameObject prefab;
     [SerializeField] int amount;
     private Queue<GameObject> pool;
+    protected CompositeDisposable disposables = new CompositeDisposable();
     public void Initiate(Transform poolHolder = null)
     {
         var poolParent = new GameObject(poolName);
@@ -34,4 +36,9 @@ public abstract class ObjectPool : ScriptableObject
     }
 
     public abstract GameObject PoolObjModify(GameObject obj);
+
+    private void OnDisable()
+    {
+        disposables?.Clear();
+    }
 }

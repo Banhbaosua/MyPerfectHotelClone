@@ -16,7 +16,7 @@ public class Room : MonoBehaviour
     protected bool isAvailable = true;
     CompositeDisposable disposables = new CompositeDisposable();
 
-    public bool IsAvailable => isAvailable;
+    public virtual bool IsAvailable => isAvailable;
     private void Awake()
     {
         Initiate();
@@ -47,9 +47,14 @@ public class Room : MonoBehaviour
                     isPlayerInside = false;
             }).AddTo(disposables);
     }
-    // Update is called once per frame
-    void Update()
+    
+    public void Occupied()
     {
-        
+        isAvailable = false;
+    }
+
+    public void Available()
+    {
+        isAvailable = true;
     }
 }

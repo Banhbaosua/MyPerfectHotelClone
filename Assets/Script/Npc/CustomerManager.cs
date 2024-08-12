@@ -18,6 +18,7 @@ public class CustomerManager : MonoBehaviour
     public IObservable<Transform> OnCustomerSpawnResponse => onCustomerSpawnRequest;
     public IObservable<Transform> OnCustomerDesSet => onCustomerDesSet;
     public IObservable<Unit> OnCashSpawnRequest => onCashSpawnRequest;
+    public Transform StartPos => startPos;
     private void Awake()
     {
         if (Instance == null)
@@ -45,7 +46,9 @@ public class CustomerManager : MonoBehaviour
 
         OnCustomerSpawnResponse.Subscribe(x =>
         {
-            spawnSystem.Spawn<CustomerPool>(startPos);
+            var customer = spawnSystem.Spawn<CustomerPool>(startPos);
+
+            recipientController.AddWaiting(customer.GetComponent<CustomerController>());
             onCustomerDesSet.OnNext(x);
         }).AddTo(disposables);
     }

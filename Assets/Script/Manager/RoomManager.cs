@@ -13,9 +13,10 @@ public class RoomManager : MonoBehaviour
     // Update is called once per frame
     void InitiateRoomsData()
     {
+        roomsData.Init();
         foreach(Room room in this.transform.GetComponentsInChildren<Room>())
         {
-            roomsData.List.Add(room);
+            roomsData.AddRoom(room);
         }
     }
 }
