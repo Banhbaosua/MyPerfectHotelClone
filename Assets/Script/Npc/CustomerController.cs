@@ -5,8 +5,6 @@ using UniRx;
 using UnityEngine;
 using UnityEngine.AI;
 
-
-
 public class CustomerController : MonoBehaviour
 {
     enum CustomerState
@@ -151,7 +149,7 @@ public class CustomerController : MonoBehaviour
         agent.enabled = true;
 
         customer.Slept();
-
+        customer.GetRoom<SleepingRoom>().RoomUsed();
         //Random give tip
         //if (RandomByWeight(50))
         //{
@@ -181,6 +179,7 @@ public class CustomerController : MonoBehaviour
         customer.RequestToilet(false);
         this.transform.rotation = Quaternion.identity;
         this.transform.position = customer.GetRoom<ToiletRoom>().transform.position;
+        customer.CurrentToilet.Available();
         agent.enabled = true;
     }
 

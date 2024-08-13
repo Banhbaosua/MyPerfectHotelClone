@@ -1,19 +1,20 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class ToiletRoom : Room
+public class ToiletRoom : Room, IUnlockable
 {
     [SerializeField] List<Toilet> toilets;
     [SerializeField] List<ToiletWaitSpot> waitSpots;
+    private bool isUnlock;
+    public override bool IsAvailable => GetEmptyToilet() != null && isUnlock;
 
-    public override bool IsAvailable => GetEmptyToilet() != null;
+    public bool IsUnlock { get => isUnlock; }
 
     public Toilet GetEmptyToilet()
     {
-        return toilets.Where(x => x.IsAvailable).FirstOrDefault();
+        return toilets.Find(x => x.IsAvailable);
     }
 
     public Transform GetEmptyWaitSpot()
@@ -21,9 +22,15 @@ public class ToiletRoom : Room
 
         return null;
     }
+
+    public void Unlock()
+    {
+        isUnlock = true;
+    }
+
     private void Start()
     {
-        Debug.Log(IsAvailable);
+        Unlock();
     }
 }
 [Serializable]

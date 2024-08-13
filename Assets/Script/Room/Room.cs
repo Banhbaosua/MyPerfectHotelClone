@@ -24,7 +24,7 @@ public class Room : MonoBehaviour
             cameraController = Camera.main.GetComponentInParent<CameraController>();
     }
 
-    void Initiate()
+    protected virtual void Initiate()
     {
         var playerRoomEnterStream = doorColInside.OnTriggerExitAsObservable()
             .Where(x => x.gameObject.CompareTag("Player") && !isPlayerInside)

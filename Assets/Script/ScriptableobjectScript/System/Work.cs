@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UniRx;
@@ -8,16 +9,21 @@ using UnityEngine.UI;
 public abstract class Work : MonoBehaviour
 {
     [SerializeField] WorkData data;
-    [SerializeField] GameObject timerGO;
+    [SerializeField] protected GameObject timerGO;
     [SerializeField] Image timerGOFill;
-    [SerializeField] Collider workZone;
-    CompositeDisposable disposables = new CompositeDisposable();
+    [SerializeField] protected Collider workZone;
+    protected CompositeDisposable disposables = new CompositeDisposable();
     private bool hasStarted;
-    private bool isAvailable;
-    private bool isDone;
+    protected bool isAvailable;
+    protected bool isDone;
 
     private float timer;
 
+    Subject<Unit> onWorkDone;
+    public IObservable<Unit> OnWorkDone => onWorkDone;
+    protected IObservable<Collider> workStream;
+    protected IObservable<Collider> workStreamAvailable;
+    protected IObservable<Collider> workStreamNotAvailable;
     public bool IsDone => isDone;
     public bool IsAvailable => isAvailable;
 
@@ -29,17 +35,21 @@ public abstract class Work : MonoBehaviour
     public virtual void WorkDone(bool value)
     {
         isDone = value;
+        onWorkDone.OnNext(Unit.Default);
     }
 
     protected virtual void Initiate()
     {
+        onWorkDone = new Subject<Unit>();
         TimerStreamInitiate();
     }
 
     void TimerStreamInitiate()
     {
-        var workStreamAvailable = workZone.OnTriggerStayAsObservable().Where(_ => isAvailable);
-        var workStreamNotAvailable = workZone.OnTriggerStayAsObservable().Where(_ => !isAvailable);
+        workStream = workZone.OnTriggerStayAsObservable();
+        workStreamAvailable = workStream.Where(_ => isAvailable);
+        workStreamNotAvailable = workStream.Where(_ => !isAvailable);
+
         workStreamAvailable.Where(_ => !hasStarted)
             .Subscribe(_ =>
             {
@@ -75,7 +85,7 @@ public abstract class Work : MonoBehaviour
     {
         timerGOFill.fillAmount = time/data.WorkTime;
     }
-    protected virtual void Start()
+    protected virtual void Awake()
     {
         Initiate();
     }

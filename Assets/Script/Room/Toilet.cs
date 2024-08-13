@@ -1,14 +1,13 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
 public class Toilet : MonoBehaviour
 {
     [SerializeField] Transform sitSpot;
+    [SerializeField] int useTimes;
     private bool isAvailable;
-    public bool IsAvailable => isAvailable;
+    public bool IsAvailable => isAvailable && useTimes > 0;
     public Transform SitSpot => sitSpot;
     private void Awake()
     {
@@ -22,5 +21,6 @@ public class Toilet : MonoBehaviour
     public void Occupied()
     {
         isAvailable = false;
+        useTimes--;
     }
 }

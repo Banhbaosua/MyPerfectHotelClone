@@ -1,7 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 public class Customer
 {
     private bool hasRoom;
@@ -21,7 +17,7 @@ public class Customer
     public Toilet CurrentToilet => currentToilet;
     public float Cash => cash;
     public float Tip => tip;
-    public Customer(float cash,float tip)
+    public Customer(float cash, float tip)
     {
         hasRoom = false;
         needToilet = false;
@@ -41,19 +37,19 @@ public class Customer
         asignedRoom = room;
     }
 
-    public void SetToilet(Toilet toilet) 
+    public void SetToilet(Toilet toilet)
     {
         currentToilet = toilet;
     }
 
     public void Slept()
     {
-        hasSlept=true;
+        hasSlept = true;
     }
 
     public void RequestToilet(bool value)
     {
-        needToilet=value;
+        needToilet = value;
     }
 
     public void Out()
