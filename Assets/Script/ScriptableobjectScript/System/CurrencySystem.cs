@@ -12,9 +12,13 @@ public class CurrencySystem : ScriptableObject, ILoadSavable
     [SerializeField] ReactiveProperty<int> token;
     [SerializeField] ReactiveProperty<int> gem;
 
-    private Subject<Unit> onCashCollect;
-    public IObservable<Unit> OnCashCollect => onCashCollect;
+    public IObservable<int> OnCashCollect => cash;
 
+    private void OnEnable()
+    {
+        Load();
+        OnCashCollect.Subscribe(_ => Save());
+    }
     public void Load()
     {
         CurrencyData? data = SaveGame.Load<CurrencyData>("CurrecySystemData");
@@ -27,6 +31,11 @@ public class CurrencySystem : ScriptableObject, ILoadSavable
     public void Save()
     {
         SaveGame.Save("CurrecySystemData", new CurrencyData(cash.Value, token.Value, gem.Value));
+    }
+
+    public void CollectCash(Cash cash)
+    {
+        this.cash.Value += cash.Value;
     }
 }
 

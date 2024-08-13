@@ -5,14 +5,13 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     [SerializeField] ExpSystem expSystem;
-    [SerializeField] List<ObjectPool> pools;
+    [SerializeField] CashPool cashPool;
+    [SerializeField] CustomerPool customerPool;
     private void Awake()
     {
         expSystem.Initiate();
-        foreach(var pool in pools) 
-        {
-            pool.Initiate(this.transform);
-        }
+        cashPool.Initiate(this.transform);
+        customerPool.Initiate(this.transform);
     }
 
     // Update is called once per frame

@@ -1,36 +1,45 @@
 using MonsterLove.StateMachine;
+using System;
 using System.Collections;
-using System.Collections.Generic;
-using TMPro;
 using UniRx;
 using UnityEngine;
 using UnityEngine.AI;
 
-public enum CustomerState
-{
-    AnyState,
-    Waiting,
-    Moving,
-    Sleeping,
-}
-
-public class CustomerDriver
-{
-    public StateEvent Update;
-    public StateEvent FixedUpdate;
-}
 public class CustomerController : MonoBehaviour
 {
+    enum CustomerState
+    {
+        AnyState,
+        Wait,
+        Moving,
+        Sleep,
+        TakingToilet,
+    }
+    public class CustomerDriver
+    {
+        public StateEvent Update;
+        public StateEvent FixedUpdate;
+    }
     [SerializeField] NavMeshAgent agent;
-    [SerializeField] float cash;
-    [SerializeField] float tip;
+    [SerializeField] int cash;
+    [SerializeField] int tip;
+    [SerializeField] RoomsData roomsData;
+    [SerializeField] Rigidbody rb;
+    [SerializeField] CashPool cashPool;
     private StateMachine<CustomerState, CustomerDriver> sfm;
     private Customer customer;
-
+    private CustomerState currentState;
+    public bool IsWaiting => currentState == CustomerState.Wait;
+    Subject<Unit> onGoOut;
+    public IObservable<Unit> OnGoOut => onGoOut;
     CompositeDisposable disposables = new CompositeDisposable();
-    private void OnEnable()
+    private void Awake()
     {
         sfm = new StateMachine<CustomerState, CustomerDriver>(this);
+        onGoOut = new Subject<Unit>();
+    }
+    private void OnEnable()
+    {
         customer = new Customer(cash,tip);
 
         CustomerManager.Instance.OnCustomerDesSet
@@ -41,8 +50,6 @@ public class CustomerController : MonoBehaviour
             }).AddTo(disposables);
 
         sfm.ChangeState(CustomerState.Moving);
-        agent.stoppingDistance = 0;
-
     }
 
     private void Update()
@@ -60,15 +67,15 @@ public class CustomerController : MonoBehaviour
         disposables?.Clear();
     }
 
+    void AnyState_Enter()
+    {
+        currentState = CustomerState.AnyState;
+    }
     void AnyState_Update()
     {
-        if (!customer.HasRoom && agent.remainingDistance < 0.01f)
+        if(!customer.HasRoom)
         {
-            sfm.ChangeState(CustomerState.Waiting);
-        }
-        if (!customer.HasSlept && agent.remainingDistance < 0.01f)
-        {
-            sfm.ChangeState(CustomerState.Sleeping);
+            sfm.ChangeState(CustomerState.Wait);
         }
         if (customer.HasRoom && !customer.HasSlept)
         {
@@ -76,79 +83,167 @@ public class CustomerController : MonoBehaviour
             agent.SetDestination(room.Bed.position);
             sfm.ChangeState(CustomerState.Moving);
         }
-        if(customer.HasSlept)
+        if (customer.NeedToilet)
         {
-            var giveTip = RandomGiveMoney(50f);
-            if(giveTip)
+            var room = roomsData.FindAvailableByType<ToiletRoom>();
+            if (room != null)
             {
-                GiveMoney(customer.Tip);
+                var toilet = room.GetEmptyToilet();
+                customer.SetToilet(toilet);
+                toilet.Occupied();
+                AsignRoom(room);
+                agent.SetDestination(toilet.transform.position);
             }
+            else
+            {
+                agent.SetDestination(CustomerManager.Instance.StartPos.position);
+            }
+            sfm.ChangeState(CustomerState.Moving);
         }
 
+        if(customer.Done)
+        {
+            agent.SetDestination(CustomerManager.Instance.StartPos.position);
+            sfm.ChangeState(CustomerState.Moving);
+        }
     }
     void Moving_Enter()
     {
+        currentState = CustomerState.Moving;
         agent.isStopped = false;
     }
 
-    void Moving_FixedUpdate()
+    
+    void Moving_Update()
     {
-        if (agent.remainingDistance <0.01f)
+        if (agent.remainingDistance < 0.1f)
+        {
             sfm.ChangeState(CustomerState.AnyState);
+            if (customer.HasRoom && !customer.HasSlept)
+                sfm.ChangeState(CustomerState.Sleep);
+            if (customer.NeedToilet)
+                sfm.ChangeState(CustomerState.TakingToilet);
+            if (customer.Done)
+            {
+                onGoOut.OnNext(Unit.Default);
+            }
+        }
     }
 
     void Sleep_Enter()
     {
+        currentState = CustomerState.Sleep;
+        rb.isKinematic = true;
         agent.isStopped = true;
-        StartCoroutine(Sleep());
+        agent.enabled = false;
+
+        this.transform.position = customer.GetRoom<SleepingRoom>().SleepPos.position;
+        this.transform.rotation = Quaternion.Euler(-90, 180, 0);
+        StartCoroutine(BehaviourTimer(3));
     }
 
-    void Waiting_Enter()
+    void Sleep_Exit()
     {
-        agent.isStopped = true;
-        Debug.Log("Waiting enter");
-    }
+        rb.isKinematic = false;
+        this.transform.rotation = Quaternion.identity;
+        this.transform.position = customer.GetRoom<SleepingRoom>().Bed.position;
+        agent.enabled = true;
 
-    void Waiting_Update()
-    {
-        if(customer.HasRoom)
+        customer.Slept();
+        customer.GetRoom<SleepingRoom>().RoomUsed();
+        //Random give tip
+        //if (RandomByWeight(50))
+        //{
+        //    GiveMoney(tip);
+        //}
+        //random need toilet
+        if(RandomByWeight(100))
         {
-            var room = customer.AsignedRoom as SleepingRoom;
-            agent.SetDestination(room.Bed.position);
-            sfm.ChangeState(CustomerState.Moving);
+            customer.RequestToilet(true);
+            
         }
     }
 
-    bool RandomToiletUse(float weight)
+    void TakingToilet_Enter()
     {
-        var rd = Random.Range(0, 100);
-        if (rd - weight < 0)
-            return true;
-        else
-            return false;
-    }
-
-    bool RandomGiveMoney(float weight) 
-    {
-        var rd = Random.Range(0, 100);
-        if(rd- weight < 0)
-            return true;
-        else
-            return false;
-    }
-
-    void GiveMoney(float cash)
-    {
+        StopAgent(true);
+        this.transform.rotation = Quaternion.Euler(0, 180, 0);
+        this.transform.position = customer.CurrentToilet.SitSpot.position;
+        StartCoroutine(BehaviourTimer(3));
 
     }
 
-    IEnumerator Sleep()
+    void TakingToilet_Exit()
     {
-        this.transform.rotation = Quaternion.Euler(-90, 180, 0);
-        yield return new WaitForSeconds(5f);
-
+        rb.isKinematic = false;
+        customer.Out();
+        customer.RequestToilet(false);
         this.transform.rotation = Quaternion.identity;
-        customer.Slept();
+        this.transform.position = customer.GetRoom<ToiletRoom>().transform.position;
+        customer.CurrentToilet.Available();
+        agent.enabled = true;
+    }
+
+    void Wait_Enter()
+    {
+        currentState = CustomerState.Wait;
+        agent.isStopped = true;
+    }
+
+    void Wait_Update()
+    {
+        if (customer.HasRoom)
+        {
+            sfm.ChangeState(CustomerState.AnyState);
+        }
+        if (agent.remainingDistance > 0.1f)
+            sfm.ChangeState(CustomerState.Moving);
+    }
+
+    bool RandomByWeight(float weight) 
+    {
+        var rd = UnityEngine.Random.Range(0, 100f);
+        if(rd- weight <= 0)
+            return true;
+        else
+            return false;
+    }
+
+    public Cash GiveMoney(Vector3 targetPosition)
+    {
+        var cashGO = cashPool.Borrow();
+        cashGO.SetValue(cash);
+        cashGO.transform.position = targetPosition;
+        cashGO.gameObject.SetActive(true);
+        return cashGO;
+    }
+    public void AsignRoom(Room room)
+    {
+        customer.SetRoom(room);
+
+    }
+
+    public void SetDest(Vector3 destination)
+    {
+        agent.SetDestination(destination);
+    }
+
+    IEnumerator BehaviourTimer(float sleepTime)
+    {
+        float timer = sleepTime;
+        while(timer > 0)
+        {
+            yield return new WaitForEndOfFrame();
+            timer-= Time.deltaTime;
+        }
+
         sfm.ChangeState(CustomerState.AnyState);
+    }
+
+    void StopAgent(bool value)
+    {
+        rb.isKinematic = value;
+        agent.isStopped = value;
+        agent.enabled = !value;
     }
 }

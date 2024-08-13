@@ -8,7 +8,7 @@ public class CustomerManager : MonoBehaviour
 {
     public static CustomerManager Instance;
 
-    [SerializeField] SpawnSystem spawnSystem;
+    [SerializeField] CustomerPool customerPool;
     [SerializeField] RecipientController recipientController;
     [SerializeField] Transform startPos;
     CompositeDisposable disposables = new CompositeDisposable();
@@ -18,6 +18,7 @@ public class CustomerManager : MonoBehaviour
     public IObservable<Transform> OnCustomerSpawnResponse => onCustomerSpawnRequest;
     public IObservable<Transform> OnCustomerDesSet => onCustomerDesSet;
     public IObservable<Unit> OnCashSpawnRequest => onCashSpawnRequest;
+    public Transform StartPos => startPos;
     private void Awake()
     {
         if (Instance == null)
@@ -45,7 +46,11 @@ public class CustomerManager : MonoBehaviour
 
         OnCustomerSpawnResponse.Subscribe(x =>
         {
-            spawnSystem.Spawn<CustomerPool>(startPos);
+            var customer = customerPool.Borrow();
+            customer.gameObject.SetActive(true);
+
+            customer.gameObject.transform.position = startPos.position;
+            recipientController.AddWaiting(customer.GetComponent<CustomerController>());
             onCustomerDesSet.OnNext(x);
         }).AddTo(disposables);
     }

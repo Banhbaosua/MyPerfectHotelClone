@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: CashPool
   m_EditorClassIdentifier: 
   poolName: cash
-  prefab: {fileID: 7188606676989303645, guid: 1aa2082fbff46e441a5ace8f8668eb02, type: 3}
+  prefab: {fileID: -5519733586229082136, guid: 1aa2082fbff46e441a5ace8f8668eb02, type: 3}
   amount: 1000
