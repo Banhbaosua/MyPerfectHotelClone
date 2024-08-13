@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: CustomerPool
   m_EditorClassIdentifier: 
   poolName: customer
-  prefab: {fileID: 5450145002868183530, guid: 402d0642c2e9a264e92dfde72c3b62d3, type: 3}
+  prefab: {fileID: 5450145002868183529, guid: 402d0642c2e9a264e92dfde72c3b62d3, type: 3}
   amount: 30

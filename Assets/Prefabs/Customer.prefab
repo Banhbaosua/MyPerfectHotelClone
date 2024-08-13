@@ -218,6 +218,7 @@ MonoBehaviour:
   tip: 20
   roomsData: {fileID: 11400000, guid: ce2b7b41f4acd5a42b7d2866869ab345, type: 2}
   rb: {fileID: 5450145002868183540}
+  cashPool: {fileID: 11400000, guid: 48a7451083a997848862c51d125e830c, type: 2}
 --- !u!1 &5450145002937170917
 GameObject:
   m_ObjectHideFlags: 0

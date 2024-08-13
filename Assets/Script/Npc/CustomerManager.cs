@@ -8,7 +8,7 @@ public class CustomerManager : MonoBehaviour
 {
     public static CustomerManager Instance;
 
-    [SerializeField] SpawnSystem spawnSystem;
+    [SerializeField] CustomerPool customerPool;
     [SerializeField] RecipientController recipientController;
     [SerializeField] Transform startPos;
     CompositeDisposable disposables = new CompositeDisposable();
@@ -46,8 +46,10 @@ public class CustomerManager : MonoBehaviour
 
         OnCustomerSpawnResponse.Subscribe(x =>
         {
-            var customer = spawnSystem.Spawn<CustomerPool>(startPos);
+            var customer = customerPool.Borrow();
+            customer.gameObject.SetActive(true);
 
+            customer.gameObject.transform.position = startPos.position;
             recipientController.AddWaiting(customer.GetComponent<CustomerController>());
             onCustomerDesSet.OnNext(x);
         }).AddTo(disposables);

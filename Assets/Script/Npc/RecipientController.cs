@@ -20,6 +20,7 @@ public class RecipientController : MonoBehaviour
     [SerializeField] RoomsData roomsData;
     [SerializeField] List<WaitingSlot> waitSlots;
     [SerializeField] AsignRoomWork asignWork;
+    [SerializeField] MoneyStack moneyStack;
     Queue<CustomerController> customerQueue;
     private StateMachine<RecipientState, RecipientDriver> sfm;
     public WaitingSlot WaitSlotAvailable => waitSlots.Where(x => x.IsAvailable == true).FirstOrDefault();
@@ -78,7 +79,10 @@ public class RecipientController : MonoBehaviour
     {
         var room = asignWork.Room;
         asignWork.Room.Occupied();
-        customerQueue.Peek().AsignRoom(room);
+        var customer = customerQueue.Peek();
+        customer.AsignRoom(room);
+        var cash = customer.GiveMoney(moneyStack.CurrenMoneyPos);
+        moneyStack.AddCash(cash);
         customerQueue.Dequeue();
 
         MoveQueueUp();

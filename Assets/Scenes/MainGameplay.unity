@@ -1522,8 +1522,8 @@ GameObject:
   - component: {fileID: 139172640}
   - component: {fileID: 139172641}
   m_Layer: 0
-  m_Name: MoneyPack
-  m_TagString: Untagged
+  m_Name: MoneyStack
+  m_TagString: MoneyStack
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1544,6 +1544,7 @@ Transform:
   - {fileID: 783085894}
   - {fileID: 1062192144}
   - {fileID: 2010191048}
+  - {fileID: 1481401637}
   m_Father: {fileID: 1270519696}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1559,12 +1560,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4adadd1fe4e6f64087add1ddcf58ba5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currencySystem: {fileID: 11400000, guid: f8476b98613af2b47ba326812985cd19, type: 2}
   xLeft: {fileID: 1062192144}
   xRight: {fileID: 783085894}
   yBot: {fileID: 1062192144}
   yTop: {fileID: 2010191048}
   zFront: {fileID: 1062192144}
   zBack: {fileID: 2009325069}
+  prefab: {fileID: 62440072913593093, guid: 1aa2082fbff46e441a5ace8f8668eb02, type: 3}
+  pool: {fileID: 11400000, guid: 48a7451083a997848862c51d125e830c, type: 2}
+  col: {fileID: 1481401638}
 --- !u!1 &140988628
 GameObject:
   m_ObjectHideFlags: 0
@@ -6985,8 +6990,9 @@ GameObject:
   - component: {fileID: 548419104}
   - component: {fileID: 548419103}
   - component: {fileID: 548419102}
+  - component: {fileID: 548419106}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: UI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7077,6 +7083,20 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &548419106
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 548419101}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b9c54816ffbdb94a96562be433b018e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currencySystem: {fileID: 11400000, guid: f8476b98613af2b47ba326812985cd19, type: 2}
+  cashText: {fileID: 1202456022}
 --- !u!1 &554267182
 GameObject:
   m_ObjectHideFlags: 0
@@ -9481,7 +9501,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &783085894
 Transform:
   m_ObjectHideFlags: 0
@@ -11254,7 +11274,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   expSystem: {fileID: 11400000, guid: 9d7cc647f7f8f8e4abeb6f80942e9fde, type: 2}
-  pools: []
+  cashPool: {fileID: 0}
+  customerPool: {fileID: 0}
 --- !u!1 &919664344
 GameObject:
   m_ObjectHideFlags: 0
@@ -12917,7 +12938,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1062192144
 Transform:
   m_ObjectHideFlags: 0
@@ -13194,7 +13215,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e2373c36a0e5e2c43ae69884761fcb17, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawnSystem: {fileID: 11400000, guid: 9e6b39c640e41cd448070a87516cea6d, type: 2}
+  customerPool: {fileID: 11400000, guid: d0d3cfb564a09cb44ab3592b390726c4, type: 2}
   recipientController: {fileID: 1270519697}
   startPos: {fileID: 358105211}
 --- !u!1 &1099621967
@@ -15045,6 +15066,7 @@ MonoBehaviour:
   - {fileID: 991740971}
   - {fileID: 1428627624}
   asignWork: {fileID: 1270519698}
+  moneyStack: {fileID: 139172641}
 --- !u!114 &1270519698
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17194,6 +17216,51 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1481111846}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1481401636
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1481401637}
+  - component: {fileID: 1481401638}
+  m_Layer: 0
+  m_Name: Collider
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1481401637
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1481401636}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.421, y: 0.379, z: 0.055}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 139172640}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1481401638
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1481401636}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.82, y: 0.75, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1485358479
 GameObject:
   m_ObjectHideFlags: 0
@@ -17896,9 +17963,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   expSystem: {fileID: 11400000, guid: 9d7cc647f7f8f8e4abeb6f80942e9fde, type: 2}
-  pools:
-  - {fileID: 11400000, guid: 48a7451083a997848862c51d125e830c, type: 2}
-  - {fileID: 11400000, guid: d0d3cfb564a09cb44ab3592b390726c4, type: 2}
+  cashPool: {fileID: 11400000, guid: 48a7451083a997848862c51d125e830c, type: 2}
+  customerPool: {fileID: 11400000, guid: d0d3cfb564a09cb44ab3592b390726c4, type: 2}
 --- !u!4 &1553128200
 Transform:
   m_ObjectHideFlags: 0
@@ -22774,7 +22840,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2009325069
 Transform:
   m_ObjectHideFlags: 0
@@ -22857,7 +22923,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2010191048
 Transform:
   m_ObjectHideFlags: 0

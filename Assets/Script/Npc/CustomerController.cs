@@ -21,10 +21,11 @@ public class CustomerController : MonoBehaviour
         public StateEvent FixedUpdate;
     }
     [SerializeField] NavMeshAgent agent;
-    [SerializeField] float cash;
-    [SerializeField] float tip;
+    [SerializeField] int cash;
+    [SerializeField] int tip;
     [SerializeField] RoomsData roomsData;
     [SerializeField] Rigidbody rb;
+    [SerializeField] CashPool cashPool;
     private StateMachine<CustomerState, CustomerDriver> sfm;
     private Customer customer;
     private CustomerState currentState;
@@ -208,11 +209,14 @@ public class CustomerController : MonoBehaviour
             return false;
     }
 
-    void GiveMoney(float cash)
+    public Cash GiveMoney(Vector3 targetPosition)
     {
-
+        var cashGO = cashPool.Borrow();
+        cashGO.SetValue(cash);
+        cashGO.transform.position = targetPosition;
+        cashGO.gameObject.SetActive(true);
+        return cashGO;
     }
-
     public void AsignRoom(Room room)
     {
         customer.SetRoom(room);
