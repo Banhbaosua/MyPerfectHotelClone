@@ -4,6 +4,8 @@ using UnityEngine;
 
 public interface IUnlockable
 {
-    public bool IsUnlock { get; }
+    public bool IsUnlocked { get; }
     public void Unlock();
+
+    public IEnumerator DepositeCash();
 }

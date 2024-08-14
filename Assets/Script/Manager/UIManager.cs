@@ -11,7 +11,7 @@ public class UIManager : MonoBehaviour
 
     private void Awake()
     {
-        currencySystem.OnCashCollect.Subscribe(x => UpdateCashUI(x));
+        currencySystem.OnCashChange.Subscribe(x => UpdateCashUI(x));
     }
 
     void UpdateCashUI(float value)

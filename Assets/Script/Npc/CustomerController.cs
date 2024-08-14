@@ -33,6 +33,7 @@ public class CustomerController : MonoBehaviour
     Subject<Unit> onGoOut;
     public IObservable<Unit> OnGoOut => onGoOut;
     CompositeDisposable disposables = new CompositeDisposable();
+    public Customer Data => customer;
     private void Awake()
     {
         sfm = new StateMachine<CustomerState, CustomerDriver>(this);
@@ -88,14 +89,20 @@ public class CustomerController : MonoBehaviour
             var room = roomsData.FindAvailableByType<ToiletRoom>();
             if (room != null)
             {
-                var toilet = room.GetEmptyToilet();
-                customer.SetToilet(toilet);
-                toilet.Occupied();
-                AsignRoom(room);
-                agent.SetDestination(toilet.transform.position);
+                if (room.IsUnlocked)
+                {
+                    var toilet = room.GetEmptyToilet();
+                    customer.SetToilet(toilet);
+                    toilet.Occupied();
+                    AsignRoom(room);
+                    agent.SetDestination(toilet.transform.position);
+                }
+                else
+                    customer.RequestToilet(false);
             }
             else
             {
+                customer.RequestToilet(false);
                 agent.SetDestination(CustomerManager.Instance.StartPos.position);
             }
             sfm.ChangeState(CustomerState.Moving);
@@ -175,6 +182,7 @@ public class CustomerController : MonoBehaviour
 
     void TakingToilet_Exit()
     {
+        customer.CurrentToilet.Used();
         rb.isKinematic = false;
         customer.Out();
         customer.RequestToilet(false);
@@ -209,10 +217,10 @@ public class CustomerController : MonoBehaviour
             return false;
     }
 
-    public Cash GiveMoney(Vector3 targetPosition)
+    public Cash GiveMoney(int amount,Vector3 targetPosition)
     {
         var cashGO = cashPool.Borrow();
-        cashGO.SetValue(cash);
+        cashGO.SetValue(amount);
         cashGO.transform.position = targetPosition;
         cashGO.gameObject.SetActive(true);
         return cashGO;

@@ -84,10 +84,10 @@ public class ExpSystem : ScriptableObject, ILoadSavable
     }
 }
 [Serializable]
-public readonly struct ExpSystemData
+public struct ExpSystemData
 {
-    public float Exp { get; }
-    public int CurrentLevel { get; }
+    [SerializeField] public float Exp;
+    [SerializeField] public int CurrentLevel;
     public ExpSystemData(float exp, int currentLevel)
     {
         this.Exp = exp;

@@ -5,19 +5,24 @@ using UniRx;
 using UniRx.Triggers;
 using UnityEngine;
 
-public class Room : MonoBehaviour
+public class Room : MonoBehaviour, ILoadSavable
 {
+    [SerializeField] protected CurrencySystem currencySystem;
     [SerializeField] CameraController cameraController;
     [SerializeField] Collider doorColInside;
     [SerializeField] Collider doorColOutside;
     [SerializeField] float rotateDegree;
-
+    private const int CASHPERDEPOSIT = 50;
+    
+    protected int currentDeposit;
+    protected virtual int CashRequired { get; }
+    
     private bool isPlayerInside = false;
     protected bool isAvailable = true;
-    CompositeDisposable disposables = new CompositeDisposable();
+    protected CompositeDisposable disposables = new CompositeDisposable();
 
     public virtual bool IsAvailable => isAvailable;
-    private void Awake()
+    protected virtual void Awake()
     {
         Initiate();
         if(cameraController == null)
@@ -56,5 +61,37 @@ public class Room : MonoBehaviour
     public void Available()
     {
         isAvailable = true;
+    }
+
+    public IEnumerator DepositeCash()
+    {
+        float baseSecond = 1;
+        while (currentDeposit < CashRequired && currencySystem.Cash > 0)
+        {
+            int withdrawCash;
+            if (CashRequired - CASHPERDEPOSIT < currentDeposit)
+            {
+                withdrawCash = currencySystem.RequestCash(CashRequired - currentDeposit);
+            }
+            else
+            {
+                withdrawCash = currencySystem.RequestCash(CASHPERDEPOSIT);
+            }
+            currentDeposit += withdrawCash;
+
+            Save();
+            yield return new WaitForSeconds(baseSecond);
+            baseSecond /= 2;
+        }
+    }
+
+    public virtual void Load()
+    {
+        
+    }
+
+    public virtual void Save()
+    {
+       
     }
 }
