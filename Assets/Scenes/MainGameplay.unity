@@ -30558,6 +30558,37 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1111495897}
   m_Mesh: {fileID: 7403385238963643386, guid: 6c7a2a8a5ceb1b24d895569a8605a3f5, type: 3}
+--- !u!1 &1119304904
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1119304905}
+  m_Layer: 0
+  m_Name: BedPos (2)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1119304905
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1119304904}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 5.505, y: 0.2, z: -6.317}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1561775521}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1121045127
 GameObject:
   m_ObjectHideFlags: 0
@@ -33361,6 +33392,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 1416443263}
   - {fileID: 38300651}
   - {fileID: 663260472}
   - {fileID: 1237197919}
@@ -33393,9 +33425,9 @@ MonoBehaviour:
   doorColInside: {fileID: 994052630}
   doorColOutside: {fileID: 1886781821}
   rotateDegree: 30
-  bed: {fileID: 527496884}
+  bed: {fileID: 1416443263}
   sleepPos: {fileID: 271151609}
-  currentRoomType: {fileID: 0}
+  currentRoomType: {fileID: 38300651}
   unlockZoneGO: {fileID: 3459997}
   cleanWorks:
   - {fileID: 6340909691939908016}
@@ -37647,6 +37679,37 @@ Transform:
   m_Father: {fileID: 1273191166}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1416443262
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1416443263}
+  m_Layer: 0
+  m_Name: BedPos (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1416443263
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1416443262}
+  m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
+  m_LocalPosition: {x: 5.505, y: 0.2, z: -6.341}
+  m_LocalScale: {x: 0.31057, y: 0.31057, z: 0.31057}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1225369557}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1424942763
 GameObject:
   m_ObjectHideFlags: 0
@@ -41144,6 +41207,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 1119304905}
   - {fileID: 730833189}
   - {fileID: 1463173093}
   - {fileID: 1462077822}
@@ -41174,9 +41238,9 @@ MonoBehaviour:
   doorColInside: {fileID: 1915327399}
   doorColOutside: {fileID: 1837774217}
   rotateDegree: 30
-  bed: {fileID: 0}
+  bed: {fileID: 1119304905}
   sleepPos: {fileID: 484291959}
-  currentRoomType: {fileID: 0}
+  currentRoomType: {fileID: 730833189}
   unlockZoneGO: {fileID: 2069439012}
   cleanWorks:
   - {fileID: 1625114227}
@@ -43211,6 +43275,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b162347e98ce752408e879151a952148, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1633878843
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1633878844}
+  m_Layer: 0
+  m_Name: BedPos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1633878844
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1633878843}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.06500006, y: 0.184, z: -0.26}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1658415907}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1634399913
 GameObject:
   m_ObjectHideFlags: 0
@@ -43630,6 +43725,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 1633878844}
   - {fileID: 678130254}
   - {fileID: 1823967348}
   - {fileID: 1867040508}
@@ -43660,7 +43756,7 @@ MonoBehaviour:
   doorColInside: {fileID: 179097832}
   doorColOutside: {fileID: 579117498}
   rotateDegree: -30
-  bed: {fileID: 729690407}
+  bed: {fileID: 1633878844}
   sleepPos: {fileID: 430882153}
   currentRoomType: {fileID: 0}
   unlockZoneGO: {fileID: 781886297}
