@@ -35,7 +35,8 @@ public abstract class Work : MonoBehaviour
     public virtual void WorkDone(bool value)
     {
         isDone = value;
-        onWorkDone.OnNext(Unit.Default);
+        if(value==true)
+            onWorkDone.OnNext(Unit.Default);
     }
 
     protected virtual void Initiate()

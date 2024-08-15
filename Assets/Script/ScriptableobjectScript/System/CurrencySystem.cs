@@ -12,38 +12,58 @@ public class CurrencySystem : ScriptableObject, ILoadSavable
     [SerializeField] ReactiveProperty<int> token;
     [SerializeField] ReactiveProperty<int> gem;
 
-    public IObservable<int> OnCashCollect => cash;
+    public int Cash => cash.Value;
+    public IObservable<int> OnCashChange => cash;
 
-    private void OnEnable()
+    public void Initiate() 
     {
         Load();
-        OnCashCollect.Subscribe(_ => Save());
+        OnCashChange.Subscribe(_ =>
+        {
+            Save(); 
+        });
     }
     public void Load()
     {
-        CurrencyData? data = SaveGame.Load<CurrencyData>("CurrecySystemData");
-        
-        cash.Value = data != null ? data.Value.Cash : 0;
-        token.Value = data != null ? data.Value.Token : 0;
-        gem.Value = data != null ? data.Value.Gem : 0;
+        CurrencyData data = SaveGame.Load("CurrecyData", new CurrencyData(0,0,0));
+        cash.Value = data.Cash;
+        token.Value = data.Token;
+        gem.Value = data.Gem;
+
     }
 
     public void Save()
     {
-        SaveGame.Save("CurrecySystemData", new CurrencyData(cash.Value, token.Value, gem.Value));
+        SaveGame.Save("CurrecyData", new CurrencyData(cash.Value, token.Value, gem.Value));
     }
 
     public void CollectCash(Cash cash)
     {
         this.cash.Value += cash.Value;
     }
+
+    public int RequestCash(int value)
+    {
+        if (Cash - value > 0)
+        {
+            cash.Value -= value;
+            return value;
+        }
+        else
+        {
+            int tmpCash = Cash;
+            cash.Value = 0;
+            return tmpCash;
+        }
+    }
 }
 
-public readonly struct CurrencyData
+[Serializable]
+public class CurrencyData
 {
-    public int Cash { get; }
-    public int Token { get; }
-    public int Gem { get; }
+    [SerializeField] public int Cash;
+    [SerializeField] public int Token;
+    [SerializeField] public int Gem;
     public CurrencyData(int cash, int token, int diamond )
     {
         this.Cash = cash;

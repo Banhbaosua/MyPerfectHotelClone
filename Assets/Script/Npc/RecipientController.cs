@@ -81,7 +81,7 @@ public class RecipientController : MonoBehaviour
         asignWork.Room.Occupied();
         var customer = customerQueue.Peek();
         customer.AsignRoom(room);
-        var cash = customer.GiveMoney(moneyStack.CurrenMoneyPos);
+        var cash = customer.GiveMoney(customer.Data.GetRoom<SleepingRoom>().RentCost,moneyStack.CurrenMoneyPos);
         moneyStack.AddCash(cash);
         customerQueue.Dequeue();
 
