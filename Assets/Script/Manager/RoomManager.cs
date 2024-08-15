@@ -46,14 +46,25 @@ public class RoomManager : MonoBehaviour, ILoadSavable
                 upgradableRooms[currentUpgradableIndex].EnableUpdate();
 
                 upgradeBoard.gameObject.SetActive(true);
+                Time.timeScale = 0;
                 boardDispoables?.Clear();
 
                 upgradeBoard.OnBtnRoom1Click
-                .Subscribe(_ => room.RoomTypeByRoomTier[room.CurrentRoomTierData].room1.gameObject.SetActive(true))
+                .Subscribe(_ =>
+                { 
+                    room.RoomTypeByRoomTier[room.CurrentRoomTierData].room1.gameObject.SetActive(true);
+                    Time.timeScale = 1;
+                    upgradeBoard.gameObject.SetActive(false);
+                })
                 .AddTo(boardDispoables);
 
                 upgradeBoard.OnBtnRoom2Click
-                .Subscribe(_ => room.RoomTypeByRoomTier[room.CurrentRoomTierData].room2.gameObject.SetActive(true))
+                .Subscribe(_ =>
+                {
+                    room.RoomTypeByRoomTier[room.CurrentRoomTierData].room2.gameObject.SetActive(true);
+                    Time.timeScale = 1; ;
+                    upgradeBoard.gameObject.SetActive(false);
+                })
                 .AddTo(boardDispoables);
 
                 Save();
