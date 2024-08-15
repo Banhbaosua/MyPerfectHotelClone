@@ -39,6 +39,7 @@ public class ExpSystem : ScriptableObject, ILoadSavable
     {
         disposables = new CompositeDisposable();
         onLevelUp = new Subject<Unit>();
+        Load();
         //levelUp stream
         OnExpReceive.Where(x => x >= NextLevelExpRequired)
             .Subscribe(x =>
@@ -51,13 +52,7 @@ public class ExpSystem : ScriptableObject, ILoadSavable
     }
     public void Load()
     {
-        if (!SaveGame.Exists("ExpSystemData"))
-        {
-            exp.Value = 0;
-            _currentLevel = 0;
-            return;
-        }
-        var data = SaveGame.Load<ExpSystemData>("ExpSystemData");
+        var data = SaveGame.Load<ExpSystemData>("ExpSystemData" , new ExpSystemData(0,0));
         exp.Value = data.Exp;
         _currentLevel = data.CurrentLevel;
     }

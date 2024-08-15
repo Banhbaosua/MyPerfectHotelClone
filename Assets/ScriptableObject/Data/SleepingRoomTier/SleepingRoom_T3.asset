@@ -15,3 +15,5 @@ MonoBehaviour:
   cashRent: 450
   expWhenUnlock: 3
   upgradeCashRequired: 1350
+  img_Room1: {fileID: 21300000, guid: 0c43b089c3109664db4b5f96b2ac4fe3, type: 3}
+  img_Room2: {fileID: 21300000, guid: b55fbcbac1563264f85d276569cf04ea, type: 3}

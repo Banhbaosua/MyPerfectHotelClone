@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UniRx;
 using UniRx.Triggers;
 using UnityEngine;
@@ -12,6 +13,8 @@ public class Room : MonoBehaviour, ILoadSavable
     [SerializeField] Collider doorColInside;
     [SerializeField] Collider doorColOutside;
     [SerializeField] float rotateDegree;
+    [SerializeField] protected TextMeshProUGUI cashRequiredText;
+
     private const int CASHPERDEPOSIT = 50;
     
     protected int currentDeposit;
@@ -78,8 +81,10 @@ public class Room : MonoBehaviour, ILoadSavable
                 withdrawCash = currencySystem.RequestCash(CASHPERDEPOSIT);
             }
             currentDeposit += withdrawCash;
-
+            cashRequiredText.text = (CashRequired - currentDeposit).ToString();
             Save();
+            if (currentDeposit >= CashRequired)
+                break;
             yield return new WaitForSeconds(baseSecond);
             baseSecond /= 2;
         }

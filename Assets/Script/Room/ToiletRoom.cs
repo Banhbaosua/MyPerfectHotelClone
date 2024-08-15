@@ -17,7 +17,6 @@ public class ToiletRoom : Room, IUnlockable,ILoadSavable
     [SerializeField] int cashUnlockRequired;
     [SerializeField] Transform lockedWall;
     [SerializeField] Transform toiletRoom;
-    [SerializeField] TextMeshProUGUI cashRequiredText;
 
     private bool isUnlocked;
     public override bool IsAvailable => GetEmptyToilet() != null && isUnlocked;
@@ -49,13 +48,14 @@ public class ToiletRoom : Room, IUnlockable,ILoadSavable
 
             unlockCol.OnTriggerExitAsObservable()
                 .Subscribe(_ => StopCoroutine(DepositeCash())).AddTo(disposables);
+
+            cashRequiredText.text = (CashRequired - currentDeposit).ToString();
         }
         else
         {
             lockedWall.gameObject.SetActive(false);
             toiletRoom.gameObject.SetActive(true);
         }
-        currencySystem.OnCashChange.Subscribe(_ => cashRequiredText.text = (cashUnlockRequired - currentDeposit).ToString());
     }
 
     public Toilet GetEmptyToilet()

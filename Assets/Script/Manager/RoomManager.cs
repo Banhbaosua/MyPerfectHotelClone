@@ -33,7 +33,7 @@ public class RoomManager : MonoBehaviour, ILoadSavable
     {
         foreach (SleepingRoom room in upgradableRooms)
         {
-            room.OnRoomUpgrade.Subscribe(_ =>
+            room.OnRoomUpgrade.Subscribe(x =>
             {
                 var room = upgradableRooms[currentUpgradableIndex];
                 upgradeBoard.SetUpgradeData(room.CurrentRoomTierData);
@@ -48,11 +48,11 @@ public class RoomManager : MonoBehaviour, ILoadSavable
                 upgradeBoard.gameObject.SetActive(true);
                 Time.timeScale = 0;
                 boardDispoables?.Clear();
-
                 upgradeBoard.OnBtnRoom1Click
                 .Subscribe(_ =>
-                { 
-                    room.RoomTypeByRoomTier[room.CurrentRoomTierData].room1.gameObject.SetActive(true);
+                {
+                    room.RoomTypeByRoomTier[x].room1.parent.gameObject.SetActive(true);
+                    room.RoomTypeByRoomTier[x].room1.gameObject.SetActive(true);
                     Time.timeScale = 1;
                     upgradeBoard.gameObject.SetActive(false);
                 })
@@ -61,7 +61,8 @@ public class RoomManager : MonoBehaviour, ILoadSavable
                 upgradeBoard.OnBtnRoom2Click
                 .Subscribe(_ =>
                 {
-                    room.RoomTypeByRoomTier[room.CurrentRoomTierData].room2.gameObject.SetActive(true);
+                    room.RoomTypeByRoomTier[x].room2.parent.gameObject.SetActive(true);
+                    room.RoomTypeByRoomTier[x].room2.gameObject.SetActive(true);
                     Time.timeScale = 1; ;
                     upgradeBoard.gameObject.SetActive(false);
                 })

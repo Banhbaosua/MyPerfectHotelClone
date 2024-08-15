@@ -15,7 +15,6 @@ public class SleepingRoom : Room, IUpgradable, ILoadSavable
     [SerializeField] List<CleanWork> cleanWorks;
     [SerializeField] List<RoomTierData> roomTiers;
     [SerializeField] List<RoomTierType> roomTypes;
-    [SerializeField] TextMeshProUGUI cashRequiredText;
     [SerializeField] Collider unlockCol;
     [SerializeField] ExpSystem expSystem;
     private bool canUpgrade;
@@ -27,19 +26,19 @@ public class SleepingRoom : Room, IUpgradable, ILoadSavable
     public int CurrentDeposit => currentDeposit;
     public int RentCost => roomTiers[currentTier - 1].CashRent;
 
-    private Dictionary<RoomTierData, RoomTierType> roomTypeByRoomTier;
-    public Dictionary<RoomTierData,RoomTierType> RoomTypeByRoomTier => roomTypeByRoomTier;
+    private Dictionary<int, RoomTierType> roomTypeByRoomTier;
+    public Dictionary<int,RoomTierType> RoomTypeByRoomTier => roomTypeByRoomTier;
     protected override int CashRequired => roomTiers[currentTier-1].UpgradeCashRequired;
     Subject<Unit> onRoomUsed;
-    Subject<RoomTierData> onRoomUpgrade;
+    Subject<int> onRoomUpgrade;
     public IObservable<Unit> OnRoomUsed => onRoomUsed;
-    public IObservable<RoomTierData> OnRoomUpgrade => onRoomUpgrade;
+    public IObservable<int> OnRoomUpgrade => onRoomUpgrade;
     
     public Transform Bed => bed;
     public Transform SleepPos => sleepPos;
 
 
-    public RoomTierData CurrentRoomTierData => roomTiers[currentTier];
+    public RoomTierData CurrentRoomTierData => roomTiers[currentTier-1];
 
     public List<RoomTierData> TierData => roomTiers;
 
@@ -47,9 +46,11 @@ public class SleepingRoom : Room, IUpgradable, ILoadSavable
     {
         base.Initiate();
         onRoomUsed = new Subject<Unit>();
-        onRoomUpgrade = new Subject<RoomTierData>();
-        roomTypeByRoomTier = new Dictionary<RoomTierData, RoomTierType>();
+        onRoomUpgrade = new Subject<int>();
+        roomTypeByRoomTier = new Dictionary<int, RoomTierType>();
         Load();
+
+        cashRequiredText.text = (CashRequired - currentDeposit).ToString();
     }
 
     private void Start()
@@ -65,7 +66,7 @@ public class SleepingRoom : Room, IUpgradable, ILoadSavable
 
         for(int i =0; i< roomTiers.Count; i++) 
         {
-            roomTypeByRoomTier.Add(roomTiers[i], roomTypes[i]);
+            roomTypeByRoomTier.Add(i, roomTypes[i]);
         }
 
         if (canUpgrade)
@@ -76,7 +77,6 @@ public class SleepingRoom : Room, IUpgradable, ILoadSavable
         {
             unlockZoneGO.gameObject.SetActive(false);
         }
-        currencySystem.OnCashChange.Subscribe(_ => cashRequiredText.text = (CashRequired - currentDeposit).ToString());
     }
 
     public void RoomUsed()
@@ -122,7 +122,7 @@ public class SleepingRoom : Room, IUpgradable, ILoadSavable
 
         expSystem.IncreaseXP(roomTiers[currentTier-1].ExpWhenUnlock);
 
-        onRoomUpgrade.OnNext(roomTiers[currentTier-1]);
+        onRoomUpgrade.OnNext(currentTier-1);
         if (currentTier < roomTiers.Count+1)
             currentTier++;
         
@@ -134,7 +134,6 @@ public class SleepingRoom : Room, IUpgradable, ILoadSavable
         var data = SaveGame.Load(this.gameObject.name, new SleepingRoomData(1, 0));
         currentDeposit = data.CurrentDeposit;
         currentTier = data.CurrentTier;
-        Debug.Log(currentTier);
     }
 
     public override void Save()
