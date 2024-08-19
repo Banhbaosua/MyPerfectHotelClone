@@ -20,11 +20,12 @@ public class CollectToiletPaper : MonoBehaviour
         toiletPaperWork.OnWorkDone.Subscribe(_ =>
         {
             toiletPaper[currentIndex+1].gameObject.SetActive(true);
+            currentIndex++;
+
             if (currentIndex < 2)
             {
                 toiletPaperWork.WorkDone(false);
                 toiletPaperWork.Available(true);
-                currentIndex++;
             }
             else
             {

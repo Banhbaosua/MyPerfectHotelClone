@@ -123,7 +123,7 @@ public class SleepingRoom : Room, IUpgradable, ILoadSavable
         expSystem.IncreaseXP(roomTiers[currentTier-1].ExpWhenUnlock);
 
         onRoomUpgrade.OnNext(currentTier-1);
-        if (currentTier < roomTiers.Count+1)
+        if (currentTier < roomTiers.Count)
             currentTier++;
         
         Save();
